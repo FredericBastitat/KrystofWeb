@@ -4,6 +4,14 @@ import { Menu, X } from 'lucide-react';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const scrollToSection = (id: string) => {
+    setIsOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <nav style={{
       position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000,
@@ -14,13 +22,13 @@ const Navbar = () => {
         maxWidth: 1100, margin: '0 auto', padding: '0 2rem',
         height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <a href="#" style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: 1 }}>
+        <a href="#/" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: 1 }}>
           KRYSTOF ELECTRIC
         </a>
 
         <div style={{ display: 'flex', gap: '2.5rem' }} className="nav-links">
-          <a href="#projekty" style={{ color: 'var(--muted)', fontSize: '0.9rem', fontWeight: 500 }}>Projekty</a>
-          <a href="#kontakt" style={{ color: 'var(--muted)', fontSize: '0.9rem', fontWeight: 500 }}>Kontakt</a>
+          <button onClick={() => scrollToSection('projekty')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', fontSize: '0.9rem', fontWeight: 500, fontFamily: 'inherit' }}>Projekty</button>
+          <button onClick={() => scrollToSection('kontakt')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', fontSize: '0.9rem', fontWeight: 500, fontFamily: 'inherit' }}>Kontakt</button>
         </div>
 
         <button onClick={() => setIsOpen(!isOpen)} style={{
@@ -36,8 +44,8 @@ const Navbar = () => {
           borderBottom: '1px solid var(--border)',
           display: 'flex', flexDirection: 'column', gap: '1.2rem',
         }}>
-          <a href="#projekty" onClick={() => setIsOpen(false)} style={{ fontWeight: 500 }}>Projekty</a>
-          <a href="#kontakt" onClick={() => setIsOpen(false)} style={{ fontWeight: 500 }}>Kontakt</a>
+          <button onClick={() => scrollToSection('projekty')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 500, textAlign: 'left', fontSize: '1rem', fontFamily: 'inherit', color: 'inherit' }}>Projekty</button>
+          <button onClick={() => scrollToSection('kontakt')} style={{ background: 'none', border: 'none', cursor: 'pointer', fontWeight: 500, textAlign: 'left', fontSize: '1rem', fontFamily: 'inherit', color: 'inherit' }}>Kontakt</button>
         </div>
       )}
 
