@@ -153,7 +153,7 @@ const Gallery = () => {
 
   return (
     <section id="projekty" className="gallery">
-      <h2>Naše Projekty</h2>
+      <h2>Moje portfolio</h2>
       <p style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '-1rem' }}>
         Klikněte na projekt pro zobrazení detailů a fotografií
       </p>

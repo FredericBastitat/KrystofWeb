@@ -8,6 +8,10 @@ interface SiteContent {
         title: string;
         description: string;
     };
+    contact: {
+        title: string;
+        description: string;
+    };
     projects: Project[];
 }
 
@@ -15,6 +19,7 @@ interface SiteContextType {
     content: SiteContent;
     loading: boolean;
     updateHero: (hero: Partial<SiteContent['hero']>) => Promise<void>;
+    updateContact: (contact: Partial<SiteContent['contact']>) => Promise<void>;
     addProject: (project: Omit<Project, 'id'>) => Promise<void>;
     updateProject: (id: number, project: Partial<Project>) => Promise<void>;
     deleteProject: (id: number) => Promise<void>;
@@ -26,6 +31,7 @@ const SiteContext = createContext<SiteContextType | undefined>(undefined);
 export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [content, setContent] = useState<SiteContent>({
         hero: { overline: '', title: '', description: '' },
+        contact: { title: '', description: '' },
         projects: [],
     });
     const [loading, setLoading] = useState(true);
@@ -40,6 +46,13 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 .eq('key', 'hero_content')
                 .maybeSingle();
 
+            // Fetch Contact
+            const { data: contactData, error: contactError } = await supabase
+                .from('site_settings')
+                .select('value')
+                .eq('key', 'contact_content')
+                .maybeSingle();
+
             // Fetch Projects
             const { data: projectsData, error: projectsError } = await supabase
                 .from('projects')
@@ -47,6 +60,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 .order('created_at', { ascending: true });
 
             if (heroError) console.error('Error fetching hero:', heroError);
+            if (contactError) console.error('Error fetching contact:', contactError);
             if (projectsError) console.error('Error fetching projects:', projectsError);
 
             setContent({
@@ -54,6 +68,10 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     overline: 'Elektroinstalace',
                     title: 'Profesionální elektrikář\ns precizním přístupem.',
                     description: 'Nabízím elektroinstalace novostaveb, rekonstrukcí a veškeré elektrické práce pro domácnosti i firmy.'
+                },
+                contact: contactData?.value || {
+                    title: 'Pojďme spolupracovat.',
+                    description: 'Máte zájem o elektroinstalaci nebo revizi? Neváhejte mě kontaktovat.'
                 },
                 projects: projectsData || [],
             });
@@ -79,6 +97,20 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
             alert('Chyba při ukládání!');
         } else {
             setContent(prev => ({ ...prev, hero: newHero }));
+        }
+    };
+
+    const updateContact = async (contactUpdates: Partial<SiteContent['contact']>) => {
+        const newContact = { ...content.contact, ...contactUpdates };
+        const { error } = await supabase
+            .from('site_settings')
+            .upsert({ key: 'contact_content', value: newContact });
+
+        if (error) {
+            console.error('Update contact error:', error);
+            alert('Chyba při ukládání kontaktu!');
+        } else {
+            setContent(prev => ({ ...prev, contact: newContact }));
         }
     };
 
@@ -172,7 +204,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <SiteContext.Provider value={{ content, loading, updateHero, addProject, updateProject, deleteProject, uploadImage }}>
+        <SiteContext.Provider value={{ content, loading, updateHero, updateContact, addProject, updateProject, deleteProject, uploadImage }}>
             {children}
         </SiteContext.Provider>
     );

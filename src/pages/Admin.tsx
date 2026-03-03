@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useSite } from '../context/SiteContext';
 import { useAuth } from '../context/AuthContext';
-import { Plus, Trash2, Save, ArrowLeft, Image as ImageIcon, LogOut, Edit2, X } from 'lucide-react';
+import { Plus, Trash2, Save, ArrowLeft, Image as ImageIcon, LogOut, Edit2, X, Mail } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { type Project } from '../data/projects';
 
 const Admin = () => {
-    const { content, loading, updateHero, addProject, updateProject, deleteProject, uploadImage } = useSite();
+    const { content, loading, updateHero, updateContact, addProject, updateProject, deleteProject, uploadImage } = useSite();
     const { user, loading: authLoading, signOut } = useAuth();
     const navigate = useNavigate();
 
     const [heroForm, setHeroForm] = useState(content.hero);
+    const [contactForm, setContactForm] = useState(content.contact);
     const [uploading, setUploading] = useState(false);
 
     // Edit Mode State
@@ -31,14 +32,20 @@ const Admin = () => {
     useEffect(() => {
         if (!loading) {
             setHeroForm(content.hero);
+            setContactForm(content.contact);
         }
-    }, [loading, content.hero]);
+    }, [loading, content.hero, content.contact]);
 
     if (loading || authLoading) return <div className="admin-loading">Načítám...</div>;
 
     const handleHeroSave = async () => {
         await updateHero(heroForm);
         alert('Texty uloženy!');
+    };
+
+    const handleContactSave = async () => {
+        await updateContact(contactForm);
+        alert('Kontakt uložen!');
     };
 
     const handleAddProject = async (e: React.FormEvent) => {
@@ -87,7 +94,15 @@ const Admin = () => {
                 </div>
                 <nav className="sidebar-nav">
                     <Link to="/" className="nav-item"><ArrowLeft size={18} /> Web</Link>
-                    <button onClick={handleSignOut} className="nav-item logout"><LogOut size={18} /> Odhlásit</button>
+                    <div className="nav-divider">Správa</div>
+                    <button onClick={() => document.getElementById('edit-textu')?.scrollIntoView({ behavior: 'smooth' })} className="nav-item">
+                        <Edit2 size={18} /> Edit textů
+                    </button>
+                    <button onClick={() => document.getElementById('edit-projektu')?.scrollIntoView({ behavior: 'smooth' })} className="nav-item">
+                        <Plus size={18} /> Edit projektů
+                    </button>
+                    <div className="nav-divider">Ostatní</div>
+                    <button onClick={handleSignOut} className="nav-item logout"><LogOut size={18} /> Odhlásit se</button>
                 </nav>
             </aside>
 
@@ -99,7 +114,7 @@ const Admin = () => {
 
                 <div className="admin-content-grid">
                     {/* Hero Section */}
-                    <div className="admin-section">
+                    <div className="admin-section" id="edit-textu">
                         <div className="section-header">
                             <Edit2 size={20} />
                             <h2>Hero Sekce</h2>
@@ -135,10 +150,36 @@ const Admin = () => {
                                 <Save size={16} /> Uložit texty
                             </button>
                         </div>
+
+                        <div className="section-header" style={{ marginTop: '1rem' }}>
+                            <Mail size={20} />
+                            <h2>Sekce Kontakt (Spodní text)</h2>
+                        </div>
+                        <div className="glass-card modern-card">
+                            <div className="form-group">
+                                <label>Titulek kontaktu</label>
+                                <input
+                                    type="text"
+                                    value={contactForm.title}
+                                    onChange={e => setContactForm({ ...contactForm, title: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Popis kontaktu</label>
+                                <textarea
+                                    rows={2}
+                                    value={contactForm.description}
+                                    onChange={e => setContactForm({ ...contactForm, description: e.target.value })}
+                                />
+                            </div>
+                            <button className="btn btn-primary" onClick={handleContactSave}>
+                                <Save size={16} /> Uložit kontakt
+                            </button>
+                        </div>
                     </div>
 
                     {/* Project Management */}
-                    <div className="admin-section">
+                    <div className="admin-section" id="edit-projektu">
                         <div className="section-header">
                             <Plus size={20} />
                             <h2>{editingProject ? 'Upravit projekt' : 'Nový projekt'}</h2>
@@ -291,7 +332,15 @@ const Admin = () => {
                 .sidebar-nav {
                     display: flex;
                     flex-direction: column;
-                    gap: 0.5rem;
+                    gap: 0.25rem;
+                }
+                .nav-divider {
+                    font-size: 0.7rem;
+                    color: #444;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    padding: 1.5rem 1rem 0.5rem;
+                    font-weight: 700;
                 }
                 .nav-item {
                     display: flex;

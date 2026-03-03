@@ -1,4 +1,5 @@
 import { Mail, Phone, Instagram } from 'lucide-react';
+import { useSite } from '../context/SiteContext';
 
 const contacts = [
   {
@@ -21,41 +22,47 @@ const contacts = [
   },
 ];
 
-const ContactForm = () => (
-  <section id="kontakt" style={{ borderTop: '1px solid var(--border)' }}>
-    <p style={{ color: 'var(--muted)', fontSize: '0.8rem', letterSpacing: 2, textTransform: 'uppercase', marginBottom: '1rem' }}>
-      Kontakt
-    </p>
-    <h2 style={{ marginBottom: '0.5rem' }}>Pojďme spolupracovat.</h2>
-    <p style={{ marginBottom: '3.5rem', maxWidth: 420 }}>
-      Máte zájem o elektroinstalaci nebo revizi? Neváhejte mě kontaktovat.
-    </p>
+const ContactForm = () => {
+  const { content, loading } = useSite();
 
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', borderTop: '1px solid var(--border)' }}>
-      {contacts.map((c) => (
-        <a
-          key={c.label}
-          href={c.href}
-          target={c.href.startsWith('http') ? '_blank' : undefined}
-          rel="noreferrer"
-          style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '1.4rem 0',
-            borderBottom: '1px solid var(--border)',
-            transition: 'opacity 0.2s',
-          }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = '0.6')}
-          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ color: 'var(--muted)' }}>{c.icon}</span>
-            <span style={{ fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 1 }}>{c.label}</span>
-          </div>
-          <span style={{ fontWeight: 600 }}>{c.value}</span>
-        </a>
-      ))}
-    </div>
-  </section>
-);
+  if (loading) return null;
+
+  return (
+    <section id="kontakt" style={{ borderTop: '1px solid var(--border)' }}>
+      <p style={{ color: 'var(--muted)', fontSize: '0.8rem', letterSpacing: 2, textTransform: 'uppercase', marginBottom: '1rem' }}>
+        Kontakt
+      </p>
+      <h2 style={{ marginBottom: '0.5rem' }}>{content.contact.title}</h2>
+      <p style={{ marginBottom: '3.5rem', maxWidth: 420 }}>
+        {content.contact.description}
+      </p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', borderTop: '1px solid var(--border)' }}>
+        {contacts.map((c) => (
+          <a
+            key={c.label}
+            href={c.href}
+            target={c.href.startsWith('http') ? '_blank' : undefined}
+            rel="noreferrer"
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '1.4rem 0',
+              borderBottom: '1px solid var(--border)',
+              transition: 'opacity 0.2s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.6')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <span style={{ color: 'var(--muted)' }}>{c.icon}</span>
+              <span style={{ fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 1 }}>{c.label}</span>
+            </div>
+            <span style={{ fontWeight: 600 }}>{c.value}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 export default ContactForm;
