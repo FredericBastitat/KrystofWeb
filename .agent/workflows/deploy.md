@@ -1,32 +1,31 @@
----
-description: Jak nasadit web na GitHub Pages
----
+name: Deploy Web to Pages
 
-# Jak nasadit web na GitHub Pages
+on:
+  push:
+    branches: [ main ] # Spustí se při pushi na main
 
-Tento projekt je nakonfigurován pro automatické nasazení pomocí GitHub Actions. Stačí váš kód nahrát na GitHub.
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-## Kroky pro první nasazení:
+      - name: Install & Build
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm' # ZRYCHLENÍ: Cachuje knihovny
+        env:
+          # Tady se vloží ty tajné klíče pro Supabase při buildu
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      
+      - run: npm ci
+      - run: npm run build
 
-1. **Vytvořte repositář na GitHubu** s názvem `KrystofWeb`.
-2. **Nahrajte svůj kód** do tohoto repositáře:
-   ```bash
-   git remote add origin https://github.com/VASE_UZIVATELSKE_JMENO/KrystofWeb.git
-   git add .
-   git commit -m "Initial commit with deployment config"
-   git push -u origin main
-   ```
-3. **Povolte GitHub Pages** v nastavení repositáře:
-   - Jděte na GitHubu do **Settings** -> **Pages**.
-   - V sekci **Build and deployment** u **Source** vyberte **GitHub Actions**.
-
-Po každém dalším `git push` se web automaticky přebuduje a nasadí.
-
-## Web bude dostupný na:
-`https://VASE_UZIVATELSKE_JMENO.github.io/KrystofWeb/`
-
-// turbo
-4. Spustit build lokálně pro kontrolu:
-   ```bash
-   npm run build
-   ```
+      - name: Deploy to GH Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist # Složka, kterou vygeneroval build
+          branch: gh-pages # Kam se má nahrát výsledek
