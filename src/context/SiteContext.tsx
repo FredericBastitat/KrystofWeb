@@ -36,7 +36,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 .from('site_settings')
                 .select('value')
                 .eq('key', 'hero_content')
-                .single();
+                .maybeSingle();
 
             // Fetch Projects
             const { data: projectsData, error: projectsError } = await supabase
