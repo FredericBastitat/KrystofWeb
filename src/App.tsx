@@ -18,7 +18,7 @@ function App() {
         textAlign: 'center',
         marginTop: '2rem',
       }}>
-        <p style={{ fontSize: '0.8rem' }}>© {new Date().getFullYear()} Krystof Electric</p>
+        <p style={{ fontSize: '0.8rem' }}>© {new Date().getFullYear()} Elektrotechnika Dvořák</p>
       </footer>
     </div>
   );
