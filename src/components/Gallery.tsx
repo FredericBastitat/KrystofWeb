@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, MapPin, Image } from 'lucide-react';
-import { projects, type Project } from '../data/projects';
+import { type Project } from '../data/projects';
+import { useSite } from '../context/SiteContext';
 
 const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => void }) => {
   const [currentImg, setCurrentImg] = useState(0);
@@ -29,7 +30,13 @@ const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => v
 
         {/* Image viewer */}
         <div className="modal-image-area">
-          <img src={project.images[currentImg]} alt={`${project.title} foto ${currentImg + 1}`} />
+          {project.images.length > 0 ? (
+            <img src={project.images[currentImg]} alt={`${project.title} foto ${currentImg + 1}`} />
+          ) : (
+            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#222' }}>
+              Žádné obrázky
+            </div>
+          )}
           {project.images.length > 1 && (
             <>
               <button className="nav-btn nav-prev" onClick={prev}><ChevronLeft /></button>
@@ -138,7 +145,11 @@ const ProjectModal = ({ project, onClose }: { project: Project; onClose: () => v
 };
 
 const Gallery = () => {
+  const { content, loading } = useSite();
+  const projects = content.projects;
   const [selected, setSelected] = useState<Project | null>(null);
+
+  if (loading) return null;
 
   return (
     <section id="projekty" className="gallery">
@@ -156,7 +167,13 @@ const Gallery = () => {
             onClick={() => setSelected(project)}
           >
             <div className="img-container">
-              <img src={project.images[0]} alt={project.title} loading="lazy" />
+              {project.images.length > 0 ? (
+                <img src={project.images[0]} alt={project.title} loading="lazy" />
+              ) : (
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#222' }}>
+                  <Image size={40} color="#444" />
+                </div>
+              )}
               <div className="card-overlay">
                 <span className="photo-count"><Image size={14} /> {project.images.length} foto</span>
                 <div className="card-info">

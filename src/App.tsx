@@ -1,26 +1,43 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Gallery from './components/Gallery';
 import ContactForm from './components/ContactForm';
+import Admin from './pages/Admin';
+
+import { Link } from 'react-router-dom';
+
+const HomePage = () => (
+  <>
+    <Navbar />
+    <main>
+      <Hero />
+      <Gallery />
+      <ContactForm />
+    </main>
+    <footer style={{
+      borderTop: '1px solid var(--border)',
+      padding: '2rem',
+      textAlign: 'center',
+      marginTop: '2rem',
+    }}>
+      <p style={{ fontSize: '0.8rem' }}>
+        © {new Date().getFullYear()} <Link to="/admin" style={{ color: 'inherit', textDecoration: 'none' }}>Elektrotechnika Dvořák</Link>
+      </p>
+    </footer>
+  </>
+);
 
 function App() {
+  const BASE = import.meta.env.BASE_URL;
+
   return (
-    <div>
-      <Navbar />
-      <main>
-        <Hero />
-        <Gallery />
-        <ContactForm />
-      </main>
-      <footer style={{
-        borderTop: '1px solid var(--border)',
-        padding: '2rem',
-        textAlign: 'center',
-        marginTop: '2rem',
-      }}>
-        <p style={{ fontSize: '0.8rem' }}>© {new Date().getFullYear()} Elektrotechnika Dvořák</p>
-      </footer>
-    </div>
+    <Router basename={BASE}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
+    </Router>
   );
 }
 
