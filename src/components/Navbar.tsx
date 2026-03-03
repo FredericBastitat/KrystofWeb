@@ -15,14 +15,14 @@ const Navbar = () => {
   return (
     <nav style={{
       position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 1000,
-      background: 'rgba(248,248,246,0.92)', backdropFilter: 'blur(8px)',
+      background: 'rgba(18, 18, 19, 0.8)', backdropFilter: 'blur(12px)',
       borderBottom: '1px solid var(--border)',
     }}>
       <div style={{
         maxWidth: 1100, margin: '0 auto', padding: '0 2rem',
         height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <a href="#/" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: 1 }}>
+        <a href="#/" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: 1, color: 'var(--fg)' }}>
           KRYSTOF ELECTRIC
         </a>
 

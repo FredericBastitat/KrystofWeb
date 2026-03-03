@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg: #2b2d2f;
+  --bg: #121213;
   --fg: #f0f0ee;
-  --muted: #9a9a9a;
-  --border: #3e4042;
+  --muted: #888888;
+  --border: #2a2a2b;
   --primary: #f0f0ee;
   --primary-light: #c8c8c6;
   --accent: #3b82f6;
-  --white: #333537;
+  --card-bg: #1c1c1e;
 }
 
 * {
@@ -92,7 +92,7 @@ p {
 
 .btn-dark {
   background: var(--fg);
-  color: var(--white);
+  color: var(--bg);
 }
 
 .btn-dark:hover {
@@ -111,7 +111,7 @@ p {
 
 /* ---------- Card ---------- */
 .card {
-  background: var(--white);
+  background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;

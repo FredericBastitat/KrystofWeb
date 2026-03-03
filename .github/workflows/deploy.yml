@@ -9,6 +9,11 @@ permissions:
   pages: write
   id-token: write
 
+# Sdružení nasazení a zrušení starších běhů při novém pushi
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,7 +26,7 @@ jobs:
           node-version: 20
           cache: 'npm'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build
         run: npm run build
       - name: Setup Pages
