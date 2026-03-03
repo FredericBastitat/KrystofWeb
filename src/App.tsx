@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Gallery from './components/Gallery';
@@ -29,10 +29,8 @@ const HomePage = () => (
 );
 
 function App() {
-  const BASE = import.meta.env.BASE_URL;
-
   return (
-    <Router basename={BASE}>
+    <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/admin" element={<Admin />} />
