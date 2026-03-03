@@ -4,20 +4,20 @@ const contacts = [
   {
     icon: <Phone size={22} />,
     label: 'Telefon',
-    value: '+420 XXX XXX XXX',
-    href: 'tel:+420XXXXXXXXX',
+    value: '+420 792 308 440',
+    href: 'tel:+420792308440',
   },
   {
     icon: <Mail size={22} />,
     label: 'E-mail',
-    value: 'vas@email.cz',
-    href: 'mailto:vas@email.cz',
+    value: 'krystofdvorak1311@gmail.com',
+    href: 'mailto:krystofdvorak1311@gmail.com',
   },
   {
     icon: <Instagram size={22} />,
     label: 'Instagram',
-    value: '@vas_instagram',
-    href: 'https://instagram.com/vas_instagram',
+    value: '@elektrotechnika_dvorak',
+    href: 'https://www.instagram.com/elektrotechnika_dvorak/',
   },
 ];
 
