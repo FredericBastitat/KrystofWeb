@@ -23,7 +23,7 @@ const Navbar = () => {
         height: 60, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
         <a href="#/" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ fontWeight: 700, fontSize: '1rem', letterSpacing: 1, color: 'var(--fg)' }}>
-          KRYSTOF ELECTRIC
+          KRYŠTOF DVOŘÁK
         </a>
 
         <div style={{ display: 'flex', gap: '2.5rem' }} className="nav-links">
