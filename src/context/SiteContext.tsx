@@ -16,6 +16,7 @@ interface SiteContextType {
     loading: boolean;
     updateHero: (hero: Partial<SiteContent['hero']>) => Promise<void>;
     addProject: (project: Omit<Project, 'id'>) => Promise<void>;
+    updateProject: (id: number, project: Partial<Project>) => Promise<void>;
     deleteProject: (id: number) => Promise<void>;
     uploadImage: (file: File) => Promise<string | null>;
 }
@@ -118,6 +119,25 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return publicUrl;
     };
 
+    const updateProject = async (id: number, projectUpdates: Partial<Project>) => {
+        const { data, error } = await supabase
+            .from('projects')
+            .update(projectUpdates)
+            .eq('id', id)
+            .select()
+            .single();
+
+        if (error) {
+            console.error('Update project error:', error);
+            alert('Chyba při aktualizaci projektu!');
+        } else if (data) {
+            setContent(prev => ({
+                ...prev,
+                projects: prev.projects.map(p => p.id === id ? data : p)
+            }));
+        }
+    };
+
     const deleteProject = async (id: number) => {
         const projectToDelete = content.projects.find(p => p.id === id);
 
@@ -152,7 +172,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <SiteContext.Provider value={{ content, loading, updateHero, addProject, deleteProject, uploadImage }}>
+        <SiteContext.Provider value={{ content, loading, updateHero, addProject, updateProject, deleteProject, uploadImage }}>
             {children}
         </SiteContext.Provider>
     );
