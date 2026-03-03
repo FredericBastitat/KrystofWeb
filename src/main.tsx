@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { SiteProvider } from './context/SiteContext'
+import { AuthProvider } from './context/AuthContext'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <SiteProvider>
-      <App />
-    </SiteProvider>
+    <AuthProvider>
+      <SiteProvider>
+        <App />
+      </SiteProvider>
+    </AuthProvider>
   </React.StrictMode>
 )
