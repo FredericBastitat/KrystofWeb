@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import Gallery from './components/Gallery';
 import ContactForm from './components/ContactForm';
 import Admin from './pages/Admin';
+import Login from './pages/Login';
 
 import { Link } from 'react-router-dom';
 
@@ -34,6 +35,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   );

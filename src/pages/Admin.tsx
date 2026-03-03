@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useSite } from '../context/SiteContext';
-import { Plus, Trash2, Save, ArrowLeft, Image as ImageIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { Plus, Trash2, Save, ArrowLeft, Image as ImageIcon, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Admin = () => {
     const { content, loading, updateHero, addProject, deleteProject } = useSite();
+    const { user, loading: authLoading, signOut } = useAuth();
+    const navigate = useNavigate();
     const [heroForm, setHeroForm] = useState(content.hero);
+
+    useEffect(() => {
+        if (!authLoading && !user) {
+            navigate('/login');
+        }
+    }, [user, authLoading, navigate]);
 
     // Sync heroForm when content changes (after initial load)
     useEffect(() => {
@@ -22,7 +31,7 @@ const Admin = () => {
     });
     const [newImageUrl, setNewImageUrl] = useState('');
 
-    if (loading) return <div className="admin-container">Načítám...</div>;
+    if (loading || authLoading) return <div className="admin-container">Načítám...</div>;
 
     const handleHeroSave = () => {
         updateHero(heroForm);
@@ -44,11 +53,21 @@ const Admin = () => {
         }
     };
 
+    const handleSignOut = async () => {
+        await signOut();
+        navigate('/');
+    };
+
     return (
         <div className="admin-container">
             <header className="admin-header">
-                <Link to="/" className="back-link"><ArrowLeft size={18} /> Zpět na web</Link>
-                <h1>Administrativní mód</h1>
+                <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                    <Link to="/" className="back-link"><ArrowLeft size={18} /> Zpět na web</Link>
+                    <h1>Administrativní mód</h1>
+                </div>
+                <button onClick={handleSignOut} className="btn btn-outline" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    <LogOut size={18} /> Odhlásit se
+                </button>
             </header>
 
             <div className="admin-grid">
@@ -177,7 +196,7 @@ const Admin = () => {
           margin-bottom: 3rem;
           display: flex;
           align-items: center;
-          gap: 2rem;
+          justify-content: space-between;
         }
         .back-link {
           display: flex;
