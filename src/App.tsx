@@ -5,29 +5,21 @@ import ContactForm from './components/ContactForm';
 
 function App() {
   return (
-    <div className="app">
-      <div className="glow-bg"></div>
+    <div>
       <Navbar />
       <main>
         <Hero />
         <Gallery />
         <ContactForm />
       </main>
-      <footer className="footer">
-        <div className="container">
-          <p>&copy; {new Date().getFullYear()} Krystof Portfolio. Všechna práva vyhrazena.</p>
-        </div>
+      <footer style={{
+        borderTop: '1px solid var(--border)',
+        padding: '2rem',
+        textAlign: 'center',
+        marginTop: '2rem',
+      }}>
+        <p style={{ fontSize: '0.8rem' }}>© {new Date().getFullYear()} Krystof Electric</p>
       </footer>
-
-      <style>{`
-        .footer {
-          padding: 4rem 2rem;
-          text-align: center;
-          border-top: 1px solid var(--glass-border);
-          margin-top: 4rem;
-        }
-        .footer p { font-size: 0.9rem; }
-      `}</style>
     </div>
   );
 }
