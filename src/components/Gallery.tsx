@@ -3,27 +3,15 @@ import { motion } from 'framer-motion';
 const projects = [
   {
     id: 1,
-    title: "Brand Identity 2024",
-    category: "Design",
-    image: "https://images.unsplash.com/photo-1634942537034-2531766767d7?q=80&w=800&auto=format&fit=crop"
+    title: "Project 1",
+    category: "Fotografie",
+    image: `${import.meta.env.BASE_URL}images/Project1/IMG_3565.jpeg`
   },
   {
     id: 2,
-    title: "Eco Mobile App",
-    category: "Development",
-    image: "https://images.unsplash.com/photo-1616469829581-73993eb86b02?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: 3,
-    title: "Minimal Interior",
-    category: "Architecture",
-    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: 4,
-    title: "Future Tech UI",
-    category: "UI/UX",
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop"
+    title: "Project 1",
+    category: "Fotografie",
+    image: `${import.meta.env.BASE_URL}images/Project1/IMG_3568.jpeg`
   }
 ];
 
