@@ -1,4 +1,5 @@
-name: AKTUALIZACE-WEBU-ZDE
+# Final deploy fix
+name: NASAĎ-ZBYTKY-OPRAV-NA-WEB
 
 on:
   push:
@@ -9,7 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-# Sdružení nasazení a zrušení starších běhů při novém pushi
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -29,8 +29,9 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
-      - name: List files (Debug)
-        run: ls -R dist
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
