@@ -5,10 +5,11 @@ import { Plus, Trash2, Save, ArrowLeft, Image as ImageIcon, LogOut } from 'lucid
 import { Link, useNavigate } from 'react-router-dom';
 
 const Admin = () => {
-    const { content, loading, updateHero, addProject, deleteProject } = useSite();
+    const { content, loading, updateHero, addProject, deleteProject, uploadImage } = useSite();
     const { user, loading: authLoading, signOut } = useAuth();
     const navigate = useNavigate();
     const [heroForm, setHeroForm] = useState(content.hero);
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         if (!authLoading && !user) {
@@ -44,6 +45,18 @@ const Admin = () => {
         addProject(newProject);
         setNewProject({ title: '', location: '', description: '', images: [] });
         alert('Projekt přidán!');
+    };
+
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setUploading(true);
+        const url = await uploadImage(file);
+        if (url) {
+            setNewProject(prev => ({ ...prev, images: [...prev.images, url] }));
+        }
+        setUploading(false);
     };
 
     const addImageToNewProject = () => {
@@ -133,7 +146,27 @@ const Admin = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label>Obrázky (URL)</label>
+                            <label>Obrázky</label>
+
+                            {/* File Upload */}
+                            <div className="file-upload-wrapper" style={{ marginBottom: '1rem' }}>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileUpload}
+                                    style={{ display: 'none' }}
+                                    id="project-image-upload"
+                                    disabled={uploading}
+                                />
+                                <label htmlFor="project-image-upload" className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', width: '100%' }}>
+                                    <ImageIcon size={18} />
+                                    {uploading ? 'Nahrávám...' : 'Vybrat fotku z počítače'}
+                                </label>
+                            </div>
+
+                            <div style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--muted)', margin: '0.5rem 0' }}>— nebo vložit URL —</div>
+
+                            {/* URL Upload */}
                             <div style={{ display: 'flex', gap: '0.5rem' }}>
                                 <input
                                     type="text"
@@ -145,6 +178,7 @@ const Admin = () => {
                                     <Plus size={18} />
                                 </button>
                             </div>
+
                             <div className="admin-images-preview">
                                 {newProject.images.map((img, i) => (
                                     <div key={i} className="preview-img">

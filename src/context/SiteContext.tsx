@@ -17,6 +17,7 @@ interface SiteContextType {
     updateHero: (hero: Partial<SiteContent['hero']>) => Promise<void>;
     addProject: (project: Omit<Project, 'id'>) => Promise<void>;
     deleteProject: (id: number) => Promise<void>;
+    uploadImage: (file: File) => Promise<string | null>;
 }
 
 const SiteContext = createContext<SiteContextType | undefined>(undefined);
@@ -95,7 +96,32 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    const uploadImage = async (file: File) => {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+        const filePath = `project-images/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+            .from('projects')
+            .upload(filePath, file);
+
+        if (uploadError) {
+            console.error('File upload error:', uploadError);
+            alert('Chyba při nahrávání obrázku!');
+            return null;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+            .from('projects')
+            .getPublicUrl(filePath);
+
+        return publicUrl;
+    };
+
     const deleteProject = async (id: number) => {
+        const projectToDelete = content.projects.find(p => p.id === id);
+
+        // delete from db
         const { error } = await supabase
             .from('projects')
             .delete()
@@ -105,12 +131,28 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
             console.error('Delete project error:', error);
             alert('Chyba při mazání projektu!');
         } else {
+            // Delete related images from storage if they were uploaded to our bucket
+            if (projectToDelete?.images) {
+                const filesToDelete = projectToDelete.images
+                    .filter(url => url.includes('project-images/'))
+                    .map(url => {
+                        const parts = url.split('project-images/');
+                        return `project-images/${parts[parts.length - 1]}`;
+                    });
+
+                if (filesToDelete.length > 0) {
+                    await supabase.storage
+                        .from('projects')
+                        .remove(filesToDelete);
+                }
+            }
+
             setContent(prev => ({ ...prev, projects: prev.projects.filter(p => p.id !== id) }));
         }
     };
 
     return (
-        <SiteContext.Provider value={{ content, loading, updateHero, addProject, deleteProject }}>
+        <SiteContext.Provider value={{ content, loading, updateHero, addProject, deleteProject, uploadImage }}>
             {children}
         </SiteContext.Provider>
     );
