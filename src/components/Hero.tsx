@@ -1,28 +1,27 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 
 const Hero = () => {
-    return (
-        <section className="hero">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="hero-content"
-            >
-                <span className="badge">Dostupný pro zakázky</span>
-                <h1>Digitální tvorba & <br /> <span className="text-glow">Inovativní design</span></h1>
-                <p>Tvořím moderní vizuální identity a webové aplikace, které pomáhají značkám růst v digitálním věku.</p>
-                <div className="hero-actions">
-                    <a href="#projekty" className="btn-primary">Moje práce</a>
-                    <a href="#kontakt" className="btn-secondary">Kontaktujte mě</a>
-                </div>
-            </motion.div>
+  return (
+    <section className="hero">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="hero-content"
+      >
+        <span className="badge">Dostupný pro zakázky</span>
+        <h1>Digitální tvorba & <br /> <span className="text-glow">Inovativní design</span></h1>
+        <p>Tvořím moderní vizuální identity a webové aplikace, které pomáhají značkám růst v digitálním věku.</p>
+        <div className="hero-actions">
+          <a href="#projekty" className="btn-primary">Moje práce</a>
+          <a href="#kontakt" className="btn-secondary">Kontaktujte mě</a>
+        </div>
+      </motion.div>
 
-            <div className="glow-orb" style={{ top: '-10%', right: '10%' }}></div>
-            <div className="glow-orb" style={{ bottom: '10%', left: '-5%', background: 'var(--secondary)', opacity: 0.3 }}></div>
+      <div className="glow-orb" style={{ top: '-10%', right: '10%' }}></div>
+      <div className="glow-orb" style={{ bottom: '10%', left: '-5%', background: 'var(--secondary)', opacity: 0.3 }}></div>
 
-            <style>{`
+      <style>{`
         .hero {
           height: 100vh;
           display: flex;
@@ -69,8 +68,8 @@ const Hero = () => {
           background: var(--glass);
         }
       `}</style>
-        </section>
-    );
+    </section>
+  );
 };
 
 export default Hero;
